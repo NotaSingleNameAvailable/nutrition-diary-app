@@ -71,7 +71,7 @@ Screenshots
 Login/register Page with username checks and bcrypt-hashed passwords
 ![Login Page](screenshots/1_login_page.png)
 
-Profile Setup page with input validation and checks.
+Profile Setup page with input validation; allows either automatic goal calculation (Mifflin-St Jeor) or custom calorie/macro targets.
 ![Profile Setup](screenshots/2_profile_setup.png)
 
 Dashboard page with input validation and data checks. 
