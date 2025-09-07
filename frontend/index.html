@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="app-title">Nutrition Diary App</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+</head>
+<body>
+  <!-- Authentication Section: Login and Register -->
+  <div id="auth-section">
+    <!-- Login Page -->
+<div id="login-page" class="auth-page">
+  <h2 data-i18n="login-title">Login</h2>
+  <form id="login-form">
+      <input type="text" id="login-username" data-i18n-placeholder="username-placeholder" placeholder="Username" required>
+      <input type="password" id="login-password" data-i18n-placeholder="password-placeholder" placeholder="Password" required>
+      <button type="submit" data-i18n="login-button">Login</button>
+  </form>
+  <p id="login-error" class="error-message"></p>
+  <p>
+      <span data-i18n="no-account-text">Don't have an account?</span>
+      <button id="show-register" data-i18n="register-button">Register</button>
+  </p>
+</div>
+
+<!-- Register Page -->
+<div id="register-page" class="auth-page" style="display: none;">
+  <h2 data-i18n="register-title">Register</h2>
+  <form id="register-form">
+      <input type="text" id="register-username" data-i18n-placeholder="username-placeholder" placeholder="Username" required>
+      <input type="password" id="register-password" data-i18n-placeholder="password-placeholder" placeholder="Password" required>
+      <button type="submit" data-i18n="register-button">Register</button>
+  </form>
+  <p id="register-error" class="error-message"></p>
+  <p>
+      <span data-i18n="existing-account-text">Already have an account?</span>
+      <button id="show-login" data-i18n="login-button">Login</button>
+  </p>
+</div>
+<div class="language-switcher-auth">
+  <button data-i18n="language-button">Switch to Greek</button>
+</div>
+  </div>
+
+  <!-- Main App Section (Dashboard, Stats, Profile, Settings) -->
+  <div id="app-section" style="display: none;">
+    <!-- Header with App Title and Settings Gear -->
+    <header>
+      <button id="settings-button">
+        <!-- Gear icon -->
+        <svg width="24" height="24" viewBox="0 0 24 24" style="color: #bb86fc;">
+          <path fill="currentColor" d="M12 8.5A3.5 3.5 0 1 0 12 15.5A3.5 3.5 0 0 0 12 8.5M4 12A8 8 0 0 1 12 4A8 8 0 0 1 20 12A8 8 0 0 1 12 20A8 8 0 0 1 4 12Z"/>
+        </svg>
+      </button>
+      <h1 data-i18n="app-title">Nutrition Diary</h1>
+    </header>
+
+    <!-- Profile Setup Page -->
+    <section id="profile-setup" style="display: none;">
+      <div class="history-header">
+        <button onclick="showDashboard()" class="back-button" data-i18n="back-dashboard">← Dashboard</button>
+        <h2>
+          <span data-i18n="profile-title">Profile Setup</span>
+          <img src="images/user.png" class="right-icon">
+        </h2>
+      </div>
+      <form id="profile-form">
+        <label for="age" data-i18n="age-label">Age:</label>
+        <input type="number" id="age" data-i18n-placeholder="age-placeholder" placeholder="e.g., 25" required>
+
+        <label for="gender" data-i18n="gender-label">Gender:</label>
+        <select id="gender" required>
+          <option value="0" data-i18n="gender-male">Male</option>
+          <option value="1" data-i18n="gender-female">Female</option>
+        </select>
+
+        <label for="height" data-i18n="height-label">Height (cm):</label>
+        <input type="number" id="height" data-i18n-placeholder="height-placeholder" placeholder="e.g., 170" required>
+
+        <label for="current-weight" data-i18n="current-weight-label">Current Weight (kg):</label>
+        <input type="number" id="current-weight" data-i18n-placeholder="current-weight-placeholder" placeholder="e.g., 70" required>
+
+        <label for="goal-weight" data-i18n="goal-weight-label">Goal Weight (kg):</label>
+        <input type="number" id="goal-weight" data-i18n-placeholder="goal-weight-placeholder" placeholder="e.g., 65" required>
+
+        <label for="activity-level" data-i18n="activity-label">Activity Level:</label>
+        <select id="activity-level" required>
+          <option value="BMR" data-i18n="activity-bmr">Basal Metabolic Rate (BMR)</option>
+          <option value="Sedentary" data-i18n="activity-sedentary">Sedentary (little to no exercise)</option>
+          <option value="Light" data-i18n="activity-light">Light (exercise 1-3 times/week)</option>
+          <option value="Moderate" data-i18n="activity-moderate">Moderate (exercise 4-5 times/week)</option>
+          <option value="Active" data-i18n="activity-active">Active (daily exercise or intense exercise 3-4 times/week)</option>
+          <option value="Very Active" data-i18n="activity-very-active">Very Active (intense exercise 6-7 times/week)</option>
+          <option value="Extremely Active" data-i18n="activity-extremely-active">Extremely Active (very intense exercise daily or physical job)</option>
+        </select>
+
+        <label data-i18n="goal-type-label">Goal Type:</label>
+        <div class="goal-type-selector">
+          <label>
+            <input type="radio" name="goal-type" value="app">
+            <span data-i18n="goal-app">App Calculated</span>
+          </label>
+          <label>
+            <input type="radio" name="goal-type" value="custom">
+            <span data-i18n="goal-custom">Custom Goals</span>
+          </label>
+        </div>
+
+        <div id="custom-goals-section" style="display: none;">
+          <label for="custom-calories" data-i18n="custom-calories-label">Daily Calories:</label>
+          <input type="number" id="custom-calories" required>
+          
+          <label for="custom-carbs" data-i18n="custom-carbs-label">Carbs (g):</label>
+          <input type="number" id="custom-carbs" required>
+          
+          <label for="custom-protein" data-i18n="custom-protein-label">Protein (g):</label>
+          <input type="number" id="custom-protein" required>
+          
+          <label for="custom-fat" data-i18n="custom-fat-label">Fat (g):</label>
+          <input type="number" id="custom-fat" required>
+        </div>
+
+        <button type="submit" data-i18n="save-profile">Save Profile</button>
+      </form>
+      <p id="profile-message"></p>
+    </section>
+
+    <!-- Dashboard (Homepage) -->
+    <section id="dashboard">
+      <div class="date-selector">
+        <label data-i18n="view-date-label">Viewing Date: </label>
+        <input type="date" id="view-date" required>
+        <button onclick="updateDashboard()" data-i18n="refresh-button">Refresh</button>
+      </div>
+
+      <!-- Calories Progress Section -->
+      <div class="progress-section" id="calories-section">
+        <h2>
+          <span data-i18n="daily-calories">Daily Calories</span>
+          <img src="images/bar.png" class="right-icon">
+        </h2>
+        <div class="progress-bar-container" id="calories-container">
+          <div class="progress-bar" id="calories-bar"></div>
+        </div>
+        <p id="calories-info">0 / 0</p>
+        <br><br>
+      </div>
+
+      <!-- Macros Progress Section -->
+      <div class="macros-container">
+        <div class="progress-section macro" id="carbs-section">
+          <h3 data-i18n="carbs-label">Carbs (g)</h3>
+          <div class="progress-bar-container" id="carbs-container">
+            <div class="progress-bar" id="carbs-bar"></div>
+          </div>
+          <p id="carbs-info">0 / 0</p>
+          <br><br>
+        </div>
+        <div class="progress-section macro" id="protein-section">
+          <h3 data-i18n="protein-label">Protein (g)</h3>
+          <div class="progress-bar-container" id="protein-container">
+            <div class="progress-bar" id="protein-bar"></div>
+          </div>
+          <p id="protein-info">0 / 0</p>
+          <br><br>
+        </div>
+        <div class="progress-section macro" id="fats-section">
+          <h3 data-i18n="fats-label">Fats (g)</h3>
+          <div class="progress-bar-container" id="fats-container">
+            <div class="progress-bar" id="fats-bar"></div>
+          </div>
+          <p id="fats-info">0 / 0</p>
+          <br><br>
+        </div>
+      </div>
+
+      <!-- Manual Log Section -->
+      <div class="manual-log">
+        <h2>
+          <span data-i18n="manual-log-title">Manual Log</span>
+          <img src="images/logbook.png" class="right-icon">
+        </h2>
+        <form id="manual-log-form">
+          <input type="number" id="calories" data-i18n-placeholder="calories-placeholder" placeholder="Calories" min="0" step="1" required>
+          <input type="number" id="carbs" data-i18n-placeholder="carbs-placeholder" placeholder="Carbs (g)" min="0" step="1" required>
+          <input type="number" id="protein" data-i18n-placeholder="protein-placeholder" placeholder="Protein (g)" min="0" step="1" required>
+          <input type="number" id="fats" data-i18n-placeholder="fats-placeholder" placeholder="Fats (g)" min="0" step="1" required>
+          <button type="submit" data-i18n="add-entry-button">Add Entry</button>
+        </form>
+        <br><br>
+      </div>
+
+      <!-- Food Log Section -->
+      <div class="food-log">
+        <h2>
+          <span data-i18n="food-log-title">Food Log</span>
+          <img src="images/apple.png" class="right-icon">
+        </h2>
+        <div class="food-search">
+          <input type="text" id="food-search" data-i18n-placeholder="search-foods-placeholder" placeholder="Search foods..." autocomplete="off">
+          <div id="food-results" class="autocomplete-results"></div>
+        </div>
+        <input type="number" id="food-grams" data-i18n-placeholder="grams-placeholder" placeholder="Grams" style="display: none;">
+        <button onclick="logFood()" style="display: none;" data-i18n="add-food-button">Add Food</button>
+      </div>
+    </section>
+
+    <!-- Custom Foods Section -->
+    <section id="custom-foods" style="display: none;">
+      <div class="history-header">
+        <button onclick="showDashboard()" class="back-button" data-i18n="back-dashboard">← Dashboard</button>
+        <h2>
+          <span data-i18n="custom-foods-title">Custom Foods</span>
+          <img src="images/apple.png" class="right-icon">
+          <img src="images/logbook.png" class="right-icon">
+        </h2>
+      </div>
+      
+      <form id="custom-food-form">
+        <input type="text" id="custom-food-name" data-i18n-placeholder="food-name-placeholder" placeholder="Food Name" required>
+        <input type="number" step="1" id="custom-food-calories" data-i18n-placeholder="calories-100g" placeholder="Calories/100g" required>
+        <input type="number" step="1" id="custom-food-carbs" data-i18n-placeholder="carbs-100g" placeholder="Carbs/100g" required>
+        <input type="number" step="1" id="custom-food-protein" data-i18n-placeholder="protein-100g" placeholder="Protein/100g" required>
+        <input type="number" step="1" id="custom-food-fats" data-i18n-placeholder="fats-100g" placeholder="Fats/100g" required>
+        <button type="submit" data-i18n="save-food-button">Save Food</button>
+      </form>
+    
+      <div id="custom-foods-list" class="food-list"></div>
+    </section>
+
+    <!-- Settings Drawer -->
+    <aside id="settings-drawer">
+      <button id="profile-button" data-i18n="profile-button">Profile</button>
+      <button id="meal-history-button" data-i18n="meal-history-button">Meal History</button>
+      <button id="weight-tracker-button" data-i18n="weight-tracker-button">Weight Tracker</button>
+      <button id="custom-foods-button" data-i18n="custom-foods-button">Custom Foods</button>
+      <button id="stats-button" data-i18n="stats-button">Historical Stats</button>
+      <button id="language-button" data-i18n="language-button">Switch to Greek</button>
+      <button id="logout-button" data-i18n="logout-button">Logout</button>
+    </aside>
+
+    <div class="settings-overlay"></div>
+
+    <!-- Meal History Section -->
+    <section id="meal-history" style="display: none;">
+      <div class="history-header">
+        <button onclick="showDashboard()" class="back-button" data-i18n="back-dashboard">← Dashboard</button>
+        <h2>
+          <span data-i18n="meal-history-title">Meal History</span>
+          <img src="images/clock.png" class="right-icon">
+        </h2>
+      </div>
+      <div class="date-selector">
+        <input type="date" id="history-date" required>
+        <button onclick="loadMealHistory()" data-i18n="load-logs-button">Load Logs</button>
+      </div>
+      <div id="meal-log-entries"></div>
+    </section>
+
+    <!-- Weight Tracker Section -->
+    <section id="weight-tracker" style="display: none;">
+      <div class="history-header">
+        <button onclick="showDashboard()" class="back-button" data-i18n="back-dashboard">← Dashboard</button>
+        <h2>
+          <span data-i18n="weight-progress-title">Weight Progress</span>
+          <img src="images/weight.png" class="right-icon">
+        </h2>
+      </div>
+      <div class="weight-controls">
+        <input type="date" id="weight-date" required>
+        <input type="number" id="weight-input" step="0.1" data-i18n-placeholder="weight-placeholder" placeholder="Weight (kg)" required>
+        <button onclick="logWeight()" data-i18n="log-weight-button">Log Weight</button>
+      </div>
+      <canvas id="weight-chart"></canvas>
+      
+      <div class="weight-table-container">
+        <h3 data-i18n="weight-history-title">Weight History</h3>
+        <table class="weight-log-table">
+          <thead>
+            <tr>
+              <th data-i18n="date-header">Date</th>
+              <th data-i18n="weight-header">Weight (kg)</th>
+              <th data-i18n="actions-header">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="weight-log-entries"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Historical Stats Section -->
+    <section id="stats-page" style="display: none;">
+      <div class="history-header">
+        <button onclick="showDashboard()" class="back-button" data-i18n="back-dashboard">← Dashboard</button>
+        <h2>
+          <span data-i18n="stats-title">Historical Nutrition Stats</span>
+          <img src="images/clock.png" class="right-icon original-color">
+          <img src="images/bar.png" class="right-icon original-color">
+        </h2>
+      </div>
+
+      <div class="stats-explanation">
+        <p data-i18n="stats-description">View averages between any dates. Select a date range to see:</p>
+        <ul>
+          <li data-i18n="stats-point1">Average daily calories and macros</li>
+          <li data-i18n="stats-point2">Dates with missing food entries</li>
+        </ul>
+      </div>
+
+      <div class="date-selector">
+        <label data-i18n="start-date-label">Start Date: </label>
+        <input type="date" id="stats-start-date" required>
+        
+        <label data-i18n="end-date-label">End Date: </label>
+        <input type="date" id="stats-end-date" required>
+        
+        <button onclick="loadStats()" data-i18n="load-stats-button">Load Stats</button>
+      </div>
+
+      <!-- Average Calories -->
+      <div class="progress-section" id="avg-calories-section">
+        <h3 data-i18n="avg-calories">Average Calories</h3>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="avg-calories-bar"></div>
+        </div>
+        <p id="avg-calories-info">0 / 0</p>
+      </div>
+
+      <!-- Average Macros -->
+      <div class="macros-container">
+        <div class="progress-section macro" id="avg-carbs-section">
+          <h4 data-i18n="carbs-label">Carbs (g)</h4>
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="avg-carbs-bar"></div>
+          </div>
+          <p id="avg-carbs-info">0 / 0</p>
+        </div>
+        
+        <div class="progress-section macro" id="avg-protein-section">
+          <h4 data-i18n="protein-label">Protein (g)</h4>
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="avg-protein-bar"></div>
+          </div>
+          <p id="avg-protein-info">0 / 0</p>
+        </div>
+        
+        <div class="progress-section macro" id="avg-fats-section">
+          <h4 data-i18n="fats-label">Fats (g)</h4>
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="avg-fats-bar"></div>
+          </div>
+          <p id="avg-fats-info">0 / 0</p>
+        </div>
+      </div>
+
+      <!-- Unlogged Dates Table -->
+      <div class="excluded-dates">
+        <h3 data-i18n="excluded-dates-title">Dates Without Logs (Excluded from calculation)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="date-header">Date</th>
+              <th data-i18n="status-header">Status</th>
+            </tr>
+          </thead>
+          <tbody id="excluded-dates-list"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- Water Tracker -->
+  <div id="water-tracker">
+    <button onclick="toggleWaterControls()" class="water-button">
+      <span data-i18n="water-intake-button">Water Intake</span>
+      <img src="images/water.png" class="water-icon">
+    </button>
+    <div id="water-controls">
+      <button class="water-button" onclick="logWater(125)" data-i18n="half-cup-button">Half-cup (125ml)</button>
+      <button class="water-button" onclick="logWater(250)" data-i18n="one-cup-button">One Cup (250ml)</button>
+      <button class="water-button" onclick="logWater(500)" data-i18n="one-bottle-button">One Bottle (500ml)</button>
+      <input type="number" id="manual-water" data-i18n-placeholder="mls-placeholder" placeholder="MLs">
+      <button class="water-button" onclick="logManualWater()" data-i18n="log-manual-button">Log Manual</button>
+    </div>
+    <div id="water-total">
+      <span data-i18n="water-consumed">Daily water consumed</span><br>
+      <span id="water-ml">0 ml</span>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
