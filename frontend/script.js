@@ -260,6 +260,7 @@ registerForm.addEventListener("submit", (e) => {
     currentUserId = data.userId;
     authSection.style.display = "none";
     appSection.style.display = "block";
+    document.getElementById('ai-chat').style.display = 'block';
     
     // Clear profile form fields for new user
     document.getElementById('age').value = '';
@@ -295,6 +296,7 @@ loginForm.addEventListener("submit", (e) => {
     currentUserId = data.userId;
     authSection.style.display = "none";
     appSection.style.display = "block";
+    document.getElementById('ai-chat').style.display = 'block';
     profileSetup.style.display = "none";
     showPage('dashboard'); // This handles water tracker visibility
     initDatePicker();
@@ -435,6 +437,7 @@ profileForm.addEventListener("submit", (e) => {
       currentUserId = null;
       appSection.style.display = "none";
       authSection.style.display = "block";
+      document.getElementById('ai-chat').style.display = 'none';
       loginForm.reset();
       registerForm.reset();
       loginError.textContent = "";
@@ -585,6 +588,7 @@ const translations = {
     'ai-chat-title': 'Nutrition Assistant',
     'ai-chat-placeholder': 'Ask about food, meals, macros...',
     'ai-chat-send': 'Send',
+    'ai-chat-quick-label': 'Auto-generate a recommendation from today\'s log',
 
     //extra
     'no-entries': 'No entries'
@@ -719,6 +723,7 @@ const translations = {
     'ai-chat-title': 'Βοηθός Διατροφής',
     'ai-chat-placeholder': 'Ρωτήστε για φαγητό, γεύματα, μακροθρεπτικά...',
     'ai-chat-send': 'Αποστολή',
+    'ai-chat-quick-label': 'Αυτόματη δημιουργία πρότασης βάσει σημερινής καταγραφής',
 
     //extra
     'no-entries': 'Δεν υπάρχουν εγγραφές'
@@ -1528,3 +1533,7 @@ function updateProgressBar(elementId, consumed, goal, currentWeight, goalWeight)
     input.value = '';
     askAi(text);
   });
+
+ function clearAiChat() {
+  document.getElementById('ai-chat-messages').innerHTML = '';
+}

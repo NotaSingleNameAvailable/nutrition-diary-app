@@ -501,50 +501,68 @@ header {
 
 
 
-/* Settings Drawer Buttons */
+/* ============================= */
+/* Settings Drawer Buttons       */
+/* ============================= */
+
 #settings-drawer button {
-  background: #2a2a2a !important;
-  color: #e0e0e0 !important;
-  border: none !important;
-  padding: 15px !important;
-  text-align: left !important;
-  border-radius: 8px !important;
-  opacity: 1 !important; /* Force visibility */
-  display: block !important; /* Override any hidden states */
+  background: #4ADE80;
+  color: #121212;
+  border: none;
+  padding: 15px;
+  text-align: left;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
+/* Hover effect */
 #settings-drawer button:hover {
-  background: #363636;
+  background: #22C55E;
   transform: translateX(5px);
 }
 
+/* Click effect */
 #settings-drawer button:active {
-  background: #424242;
-}
-
-#logout-button {
-  margin-top: auto; /* Pushes logout to bottom */
-  background: #cf6679 !important; /* Error color for logout */
-}
-
-#logout-button:hover {
-  background: #b00020 !important;
+  background: #16A34A;
 }
 
 
-/* Language Switcher */
-.language-switcher-auth {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1000;
+/* ============================= */
+/* Logout button                 */
+/* ============================= */
+
+#settings-drawer #logout-button {
+  margin-top: auto;
+  background: #F44336;
+  color: white;
 }
 
-#language-button {
-  background: #2a2a2a !important;
-  color: #e0e0e0 !important;
-  margin-bottom: 15px !important;
+
+/* Logout hover */
+#settings-drawer #logout-button:hover {
+  background: #C62828;
 }
+
+
+/* ============================= */
+/* Language button inside drawer */
+/* ============================= */
+
+/* Language button inside settings drawer */
+#settings-drawer #language-button {
+  background: #4ADE80;
+  color: #121212;
+}
+
+#settings-drawer #language-button:hover {
+  background: #22C55E;
+}
+
+/* ============================= */
+/* Settings Drawer Buttons end here      */
+/* ============================= */
 
 
 
@@ -587,17 +605,17 @@ header {
 }
 
 .language-switcher-auth button {
-  background: #2a2a2a;
-  color: #e0e0e0;
-  padding: 10px 15px;
+  background: #4ADE80;
+  color: #121212;
+  padding: 12px 25px;
+  border-radius: 8px;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.2s ease;
 }
 
 .language-switcher-auth button:hover {
-  background: #363636;
+  background: #22C55E;
 }
 
 
@@ -618,6 +636,18 @@ h2 {
   gap: 10px;
 }
 
+
+/* Login/Register switch text */
+.auth-switch {
+  text-align: center;
+  margin-top: 15px;
+  line-height: 2;
+}
+
+.auth-switch button {
+  margin-top: 8px;
+  padding: 10px 25px;
+}
 
 
 /* Water tracker specific styles */
@@ -667,6 +697,7 @@ h2 {
   bottom: 20px;
   right: 20px;
   z-index: 1002;
+  display: none;
 }
 
 .ai-chat-toggle {
@@ -717,9 +748,10 @@ h2 {
 }
 
 #ai-chat-header {
+  position: relative;
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
   padding: 14px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   font-weight: 600;
@@ -733,6 +765,11 @@ h2 {
   font-size: 1.1em;
   cursor: pointer;
   padding: 4px;
+
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 #ai-chat-close:hover {
@@ -786,6 +823,39 @@ h2 {
   padding: 0;
 }
 
+.chat-bubble {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.chat-bubble.ai table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.chat-bubble.ai th,
+.chat-bubble.ai td {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 4px 8px;
+  text-align: left;
+}
+
+.chat-bubble.ai pre {
+  max-width: 100%;
+  overflow-x: auto;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.chat-bubble.ai code {
+  word-break: break-word;
+}
+
 #ai-chat-typing {
   display: flex;
   gap: 4px;
@@ -817,23 +887,27 @@ h2 {
   background: rgba(0, 0, 0, 0.15);
 }
 
+#ai-chat-quick-row {
+  text-align: center;
+  padding: 0 16px 8px;
+}
+
 #ai-chat-quick {
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(74, 222, 128, 0.12);
-  color: #4ADE80;
+  background: none;
   border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #9a9a9a;
+  font-size: 11px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.8;
+  transition: opacity 0.2s, color 0.2s;
 }
 
 #ai-chat-quick:hover {
-  background: rgba(74, 222, 128, 0.25);
+  opacity: 1;
+  color: #4ADE80;
 }
 
 #ai-chat-input {
@@ -871,4 +945,23 @@ h2 {
   #ai-chat-panel {
     width: calc(100vw - 40px);
   }
+}
+
+#ai-chat-clear {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 0.9em;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+#ai-chat-clear:hover {
+  opacity: 1;
 }
