@@ -117,11 +117,11 @@ Login/register Page with username checks and bcrypt-hashed passwords
 
 ![Login Page](screenshots/login_page.png)
 
-AI Nutrition Assistant open on the Dashboard — a floating glassmorphism chat panel (blur + transparency) that stays accessible from anywhere in the app once logged in, without disrupting the underlying page.
+AI Nutrition Assistant open on the Dashboard, a floating glassmorphism chat panel (blur + transparency) that stays accessible from anywhere in the app once logged in, without disrupting the underlying page. Can be minimized.
 
 ![AI Chat on Dashboard](screenshots/dashboard_ai.png)
 
-AI Assistant modal close-up, powered by Groq (openai/gpt-oss-120b). Pulls the user's live profile and today's logged totals server-side to compute an exact remaining calorie/macro budget, then generates grounded, context-aware suggestions — rendered as sanitized Markdown (marked.js + DOMPurify) with a typing indicator and quick-recommendation shortcut.
+AI Assistant modal close-up, powered by Groq (openai/gpt-oss-120b). Pulls the user's live profile and today's logged totals server-side, to compute an exact remaining calorie/macro budget, then generates grounded, context-aware suggestions. Rendered as sanitized Markdown (marked.js + DOMPurify) with a typing indicator and quick-recommendation shortcut.
 
 ![AI Chat Modal](screenshots/ai_modal.png)
 
@@ -154,7 +154,7 @@ Historical Stats page calculates average daily calories, carbs, protein, and fat
 ![Historical Stats](screenshots/historical_stats.png)
 
 
-AI Assistant in Greek — the chat interface, placeholders, and quick-action labels are fully translated alongside the rest of the app's i18n system.
+The app in Greek. AI Assistant in Greek, the chat interface, placeholders, and quick-action labels are fully translated alongside the rest of the app's i18n system.
 
 ![AI Chat Greek](screenshots/greek.png)
 
