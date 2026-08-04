@@ -1,6 +1,6 @@
-# Nutrition Diary App
+# AI Nutrition Diary App
 
-Nutrition Diary is a full-stack nutrition tracking application that lets users log meals, track calories, macronutrients, weight progress, and water intake, maintain a custom food database, analyze nutrition trends over time, and receive AI-powered meal recommendations based on their goals and daily intake.
+AI Nutrition Diary is a full-stack nutrition tracking application that lets users log meals, track calories, macronutrients, weight progress, and water intake, maintain a custom food database, analyze nutrition trends over time, and receive AI-powered meal recommendations based on their goals and daily intake.
 
 
 Built as a portfolio project. Originally my first full-stack application, it has since been revisited with a redesigned UI and an AI-powered nutrition assistant.
