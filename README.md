@@ -114,39 +114,48 @@ The backend handles authentication, database operations, nutrition logic, and AI
 ## Screenshots
 
 Login/register Page with username checks and bcrypt-hashed passwords
+
 ![Login Page](screenshots/login_page.png)
 
 AI Nutrition Assistant open on the Dashboard — a floating glassmorphism chat panel (blur + transparency) that stays accessible from anywhere in the app once logged in, without disrupting the underlying page.
+
 ![AI Chat on Dashboard](screenshots/dashboard_ai.png)
 
 AI Assistant modal close-up, powered by Groq (openai/gpt-oss-120b). Pulls the user's live profile and today's logged totals server-side to compute an exact remaining calorie/macro budget, then generates grounded, context-aware suggestions — rendered as sanitized Markdown (marked.js + DOMPurify) with a typing indicator and quick-recommendation shortcut.
+
 ![AI Chat Modal](screenshots/ai_modal.png)
 
 Profile Setup page with input validation; allows either automatic goal calculation (Mifflin-St Jeor) or custom calorie/macro targets.
+
 ![Profile Setup](screenshots/profile_setup.png)
 
 Dashboard page with input validation and data checks. 
+
 ![Dashboard](screenshots/dashboard.png)
 
 Side Drawer for easy navigation.  
+
 ![Side Drawer](screenshots/side_drawer.png)
 
 Meal History page showing logged meals, with edit/delete functionality , which updates the dashboard.
+
 ![Meal History](screenshots/meal_history.png)
 
 Custom Foods page to add or delete user-defined foods from the database.  
+
 ![Custom Foods](screenshots/custom_foods.png)
 
 Weight Progress page to add/delete weight logs and view progress graph.  
+
 ![Weight Progress](screenshots/weight_progress.png)
 
 Historical Stats page calculates average daily calories, carbs, protein, and fats over a selected date range, highlights missing log days, and compares intake against goals with visual progress bars.
+
 ![Historical Stats](screenshots/historical_stats.png)
 
-Greek Interface (example screen) — all pages and text are likewise fully translated.
-![Greek Interface](screenshots/9_greek.png)
 
 AI Assistant in Greek — the chat interface, placeholders, and quick-action labels are fully translated alongside the rest of the app's i18n system.
+
 ![AI Chat Greek](screenshots/greek.png)
 
 ------------------------------------------------------------------
