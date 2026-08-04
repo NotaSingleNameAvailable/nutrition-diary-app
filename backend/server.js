@@ -679,7 +679,9 @@ app.post('/api/chat/recommend', (req, res) => {
 
         Eaten so far today: ${eaten.calories} kcal, ${eaten.carbs}g carbs, ${eaten.protein}g protein, ${eaten.fats}g fat.
 
-        Remaining budget: ${goalCalories - eaten.calories} kcal, ${goalCarbs - eaten.carbs}g carbs, ${goalProtein - eaten.protein}g protein, ${goalFat - eaten.fats}g fat.`;
+        Remaining budget: ${goalCalories - eaten.calories} kcal, ${goalCarbs - eaten.carbs}g carbs, ${goalProtein - eaten.protein}g protein, ${goalFat - eaten.fats}g fat.
+
+        Formatting rules: you're replying inside a small ~340px wide chat widget. Never use Markdown tables. Prefer short plain sentences or a brief bullet list (max 3-5 bullets) over dense formatting. Avoid code blocks.`;
 
         if (message) {
           prompt += `
