@@ -626,3 +626,98 @@ app.get('/user-profile', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+
+
+//AI chatbot feature related stuff start from here and below
+require('dotenv').config();
+
+app.post('/api/chat/recommend', (req, res) => {
+  const { user_id } = req.body;
+  const today = new Date().toISOString().split('T')[0]; // e.g. "2026-08-03"
+
+  if (!user_id) {
+    return res.status(400).json({ error: 'user_id required' });
+  }
+
+  // Step 1: get the user's profile + goals
+  db.get(
+    `SELECT age, height, current_weight, goal_weight, activity_level, gender,
+            daily_calories, carbs, protein, fat,
+            goal_type, custom_calories, custom_carbs, custom_protein, custom_fat
+     FROM users WHERE user_id = ?`,
+    [user_id],
+    (err, user) => {
+      if (err) return res.status(500).json({ error: 'Database error fetching user' });
+      if (!user) return res.status(404).json({ error: 'User not found' });
+
+      // Step 2: get today's totals so far
+      getDailyTotals(user_id, today, (err, totals) => {
+        if (err) return res.status(500).json({ error: 'Database error fetching totals' });
+
+        // Step 3: figure out which goal numbers actually apply
+        const goalCalories = user.goal_type === 'custom' ? user.custom_calories : user.daily_calories;
+        const goalCarbs = user.goal_type === 'custom' ? user.custom_carbs : user.carbs;
+        const goalProtein = user.goal_type === 'custom' ? user.custom_protein : user.protein;
+        const goalFat = user.goal_type === 'custom' ? user.custom_fat : user.fat;
+
+        const eaten = {
+          calories: totals?.totalCalories || 0,
+          carbs: totals?.totalCarbs || 0,
+          protein: totals?.totalProtein || 0,
+          fats: totals?.totalFats || 0
+        };
+
+        // Step 4: build the prompt
+        const { message } = req.body;
+
+        const genderText = user.gender === 0 ? 'male' : 'female';
+
+        let prompt = `User profile: ${user.age} years old, ${genderText}, ${user.height}cm, ${user.current_weight}kg, goal weight ${user.goal_weight}kg, activity level: ${user.activity_level}.
+
+        Daily targets: ${goalCalories} kcal, ${goalCarbs}g carbs, ${goalProtein}g protein, ${goalFat}g fat.
+
+        Eaten so far today: ${eaten.calories} kcal, ${eaten.carbs}g carbs, ${eaten.protein}g protein, ${eaten.fats}g fat.
+
+        Remaining budget: ${goalCalories - eaten.calories} kcal, ${goalCarbs - eaten.carbs}g carbs, ${goalProtein - eaten.protein}g protein, ${goalFat - eaten.fats}g fat.`;
+
+        if (message) {
+          prompt += `
+
+        The user specifically asks: "${message}"
+
+        Answer their question directly, using the nutrition data above as context.`;
+        } else {
+          prompt += `
+
+        Suggest 2-3 specific food or meal options to help the user hit their remaining targets for the rest of the day. Be concise and practical.`;
+        }
+
+        // Step 5: call Groq
+        fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: 'openai/gpt-oss-120b',
+            messages: [
+              { role: 'system', content: 'You are a helpful, concise nutrition assistant inside a food-tracking app.' },
+              { role: 'user', content: prompt }
+            ]
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            const aiMessage = data.choices[0].message.content;
+            res.status(200).json({ recommendation: aiMessage });
+          })
+          .catch(err => {
+            console.error('Groq API error:', err);
+            res.status(500).json({ error: 'AI service error' });
+          });
+      });
+    }
+  );
+});

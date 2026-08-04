@@ -50,10 +50,14 @@ document.getElementById('language-button').textContent =
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Initialize goal type radio buttons
   const initialGoalType = document.querySelector('input[name="goal-type"]:checked').value;
-  document.getElementById('custom-goals-section').style.display = 
-    initialGoalType === 'custom' ? 'block' : 'none';
+  const customSection = document.getElementById('custom-goals-section');
+  customSection.style.display = initialGoalType === 'custom' ? 'block' : 'none';
+
+  // sync required state on load too, not just on change
+  customSection.querySelectorAll('input').forEach(input => {
+    input.required = initialGoalType === 'custom';
+  });
 });
 
 
@@ -577,6 +581,11 @@ const translations = {
     'log-manual-button': 'Log Manual',
     'water-consumed': 'Daily water consumed',
 
+    // AI chat
+    'ai-chat-title': 'Nutrition Assistant',
+    'ai-chat-placeholder': 'Ask about food, meals, macros...',
+    'ai-chat-send': 'Send',
+
     //extra
     'no-entries': 'No entries'
   },
@@ -705,6 +714,11 @@ const translations = {
     'mls-placeholder': 'ml',
     'log-manual-button': 'Χειροκίνητη Καταγραφή',
     'water-consumed': 'Ημερήσια κατανάλωση νερού',
+
+    // AI chat
+    'ai-chat-title': 'Βοηθός Διατροφής',
+    'ai-chat-placeholder': 'Ρωτήστε για φαγητό, γεύματα, μακροθρεπτικά...',
+    'ai-chat-send': 'Αποστολή',
 
     //extra
     'no-entries': 'Δεν υπάρχουν εγγραφές'
@@ -1266,7 +1280,7 @@ function updateWeightChart(logs) {
       datasets: [{
         label: 'Weight (kg)',
         data: weights,
-        borderColor: '#bb86fc',
+        borderColor: '#4ADE80',
         tension: 0.1
       }]
     },
@@ -1446,3 +1460,71 @@ function updateProgressBar(elementId, consumed, goal, currentWeight, goalWeight)
       console.error(error);
     };
   }
+
+  //AI chatbot related stuff start below here
+  function toggleAiChat() {
+    document.getElementById('ai-chat-panel').classList.toggle('active');
+  }
+
+  function addChatMessage(role, text) {
+    const messagesEl = document.getElementById('ai-chat-messages');
+    const bubble = document.createElement('div');
+    bubble.className = `chat-bubble ${role}`;
+
+    if (role === 'ai') {
+      bubble.innerHTML = DOMPurify.sanitize(marked.parse(text));
+    } else {
+      bubble.textContent = text;
+    }
+
+    messagesEl.appendChild(bubble);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function setChatLoading(isLoading) {
+    document.getElementById('ai-chat-typing').style.display = isLoading ? 'flex' : 'none';
+    document.getElementById('ai-chat-send').disabled = isLoading;
+    document.getElementById('ai-chat-quick').disabled = isLoading;
+  }
+
+  async function askAi(userMessage) {
+    setChatLoading(true);
+    try {
+      const response = await fetch('http://localhost:3000/api/chat/recommend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: currentUserId,
+          message: userMessage || null
+        })
+      });
+      const data = await response.json();
+      setChatLoading(false);
+
+      if (data.error) {
+        addChatMessage('ai', 'Sorry, something went wrong. Please try again.');
+        return;
+      }
+      addChatMessage('ai', data.recommendation);
+    } catch (err) {
+      setChatLoading(false);
+      addChatMessage('ai', 'Sorry, I could not reach the assistant right now.');
+      console.error('AI chat error:', err);
+    }
+  }
+
+  function getAiRecommendation() {
+    addChatMessage('user', 'Give me a recommendation based on today\'s log');
+    askAi(null);
+  }
+
+  document.getElementById('ai-chat-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const input = document.getElementById('ai-chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    addChatMessage('user', text);
+    input.value = '';
+    askAi(text);
+  });
