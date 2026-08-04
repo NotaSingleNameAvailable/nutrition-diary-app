@@ -49,7 +49,9 @@ document.getElementById('language-button').textContent =
 
 
 
-document.addEventListener("DOMContentLoaded", () => {
+  // Initialize the custom goals section based on the user's selected goal type.
+  // Show the section only when "custom" goals are selected and update the required
+  // attribute of custom goal inputs to ensure validation matches the selected option.
   const initialGoalType = document.querySelector('input[name="goal-type"]:checked').value;
   const customSection = document.getElementById('custom-goals-section');
   customSection.style.display = initialGoalType === 'custom' ? 'block' : 'none';
@@ -58,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
   customSection.querySelectorAll('input').forEach(input => {
     input.required = initialGoalType === 'custom';
   });
-});
+
 
 
 
@@ -76,43 +78,8 @@ document.querySelectorAll('input[name="goal-type"]').forEach(radio => {
   });
 });
 
-// Profile form submission handler
-document.getElementById('profile-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const goalType = document.querySelector('input[name="goal-type"]:checked').value;
-  
-  const profileData = {
-    user_id: currentUserId,
-    age: parseInt(document.getElementById('age').value, 10),
-    height: parseInt(document.getElementById('height').value, 10),
-    current_weight: parseFloat(document.getElementById('current-weight').value),
-    goal_weight: parseFloat(document.getElementById('goal-weight').value),
-    activity_level: document.getElementById('activity-level').value,
-    gender: parseInt(document.getElementById('gender').value),
-    goal_type: goalType,
-    custom_calories: document.getElementById('custom-calories').value || 0, // Ensure default values
-    custom_carbs: document.getElementById('custom-carbs').value || 0,
-    custom_protein: document.getElementById('custom-protein').value || 0,
-    custom_fat: document.getElementById('custom-fat').value || 0
-  };
 
-  fetch("http://localhost:3000/update-profile", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(profileData)
-  })
-  .then(response => {
-    if (!response.ok) throw new Error("Profile update failed");
-    profileSetup.style.display = "none";
-    dashboard.style.display = "block";
-    showPage('dashboard'); // This triggers water tracker visibility
-    updateDashboard();
-  })
-  .catch(error => {
-    profileMessage.style.color = "red";
-    profileMessage.textContent = error.message;
-  });
-});
+
 
 profileButton.addEventListener('click', () => {
   fetch(`http://localhost:3000/user-profile?user_id=${currentUserId}`)
@@ -219,6 +186,7 @@ weightTrackerButton.addEventListener('click', () => {
 
 mealHistoryButton.addEventListener('click', () => {
   showPage('meal-history');
+  document.getElementById('history-date').value = new Date().toISOString().split('T')[0];
   loadMealHistory();
 });
 
@@ -421,10 +389,9 @@ profileForm.addEventListener("submit", (e) => {
     return response.json();
   })
   .then(() => {
-    profileSetup.style.display = "none";
-    dashboard.style.display = "block";
-    updateDashboard();
-  })
+      showPage('dashboard');
+      updateDashboard();
+    })
   .catch(error => {
     profileMessage.style.color = "red";
     profileMessage.textContent = error.message;
